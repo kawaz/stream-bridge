@@ -1,0 +1,46 @@
+{
+	"name": "@kawaz/stream-bridge",
+	"version": "0.1.0",
+	"description": "A utility library that provides bidirectional conversion between Node.js streams and Web Stream API streams",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": ["dist", "src"],
+	"type": "module",
+	"scripts": {
+		"build": "bun exec 'rm -rf dist'; bun build ./src/index.ts --outdir ./dist --target=node --minify --sourcemap=linked; tsc --emitDeclarationOnly --declaration --noEmit false",
+		"prepublishOnly": "bun run build",
+		"test": "bun test",
+		"test:watch": "bun test --watch"
+	},
+	"keywords": [
+		"stream",
+		"node-stream",
+		"web-stream",
+		"stream-api",
+		"readable",
+		"writable",
+		"transform",
+		"duplex",
+		"readable-stream",
+		"writable-stream",
+		"transform-stream",
+		"converter",
+		"bridge",
+		"interop",
+		"compatibility",
+		"nodejs"
+	],
+	"author": "Yoshiaki Kawazu",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kawaz/stream-bridge"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typescript": "^5.0.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
+}
