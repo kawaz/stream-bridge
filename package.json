@@ -1,6 +1,6 @@
 {
 	"name": "@kawaz/stream-bridge",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "A utility library that provides bidirectional conversion between Node.js streams and Web Stream API streams",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",

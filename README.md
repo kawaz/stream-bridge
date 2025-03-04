@@ -1,77 +1,93 @@
-# @kawaz/fixed-chunk-stream
+# @kawaz/stream-bridge
 
-A lightweight TypeScript library that transforms streams into fixed-size chunks. This utility class extends TransformStream to provide efficient chunking of byte streams with configurable behavior for handling incomplete chunks.
+A utility library that provides bidirectional conversion between Node.js streams and Web Stream API streams.
 
 ## Features
 
-- Transform byte streams into fixed-size chunks
-- TypeScript support with full type definitions
-- Configurable handling of incomplete chunks at stream end
-- Zero dependencies
-- Works with Web Streams API
+- Convert Node.js streams to Web Stream API streams
+- Convert Web Stream API streams to Node.js streams
+- Written in TypeScript for type safety
+- Zero external runtime dependencies
+- Support for all major stream types
 
 ## Installation
 
 ```bash
 # Using npm
-npm install @kawaz/fixed-chunk-stream
+npm install @kawaz/stream-bridge
 
 # Using yarn
-yarn add @kawaz/fixed-chunk-stream
+yarn add @kawaz/stream-bridge
 
 # Using bun
-bun add @kawaz/fixed-chunk-stream
+bun add @kawaz/stream-bridge
 ```
 
 ## Usage
 
-### Basic Example
+### Converting Node.js Streams to Web Streams
 
 ```typescript
-import { FixedChunkStream } from '@kawaz/fixed-chunk-stream';
+import { toReadableStream, toWritableStream, toTransformStream } from '@kawaz/stream-bridge';
+import { Readable, Writable, Transform } from 'node:stream';
 
-// Create a stream that outputs 1KB chunks
-const chunkStream = new FixedChunkStream(1024);
+// Convert to ReadableStream
+const nodeReadable = new Readable();
+const webReadable = toReadableStream(nodeReadable);
 
-// Use it in a pipeline
-await sourceStream
-  .pipeThrough(chunkStream)
-  .pipeTo(destinationStream);
+// Convert to WritableStream
+const nodeWritable = new Writable();
+const webWritable = toWritableStream(nodeWritable);
+
+// Convert to TransformStream
+const nodeTransform = new Transform();
+const webTransform = toTransformStream(nodeTransform);
 ```
 
-### Handling Incomplete Chunks
-
-By default, any remaining bytes that cannot form a complete chunk at the end of the stream are emitted as a smaller chunk. You can change this behavior by setting `discardIncompleteChunks` to `true`.
+### Converting Web Streams to Node.js Streams
 
 ```typescript
-// Discard incomplete chunks at the end of the stream
-const chunkStream = new FixedChunkStream(1024, {
-  discardIncompleteChunks: true
-});
+import { toReadable, toWritable, toTransform } from '@kawaz/stream-bridge';
+
+// Convert to Readable
+const webReadable = new ReadableStream();
+const nodeReadable = toReadable(webReadable);
+
+// Convert to Writable
+const webWritable = new WritableStream();
+const nodeWritable = toWritable(webWritable);
+
+// Convert to Transform
+const webTransform = new TransformStream();
+const nodeTransform = toTransform(webTransform);
 ```
 
-### Complete Example
+## API
 
-```typescript
-// Example: Reading a file in chunks
-const response = await fetch('large-file.bin');
-const reader = response.body
-  .pipeThrough(new FixedChunkStream(1024))
-  .getReader();
+### Node.js → Web Stream
 
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
+- `toReadableStream<T>(readable: Readable): ReadableStream<T>`
+- `toWritableStream<T>(writable: Writable): WritableStream<T>`
+- `toTransformStream<T, O>(duplex: Transform|Duplex): TransformStream<T, O>`
+- `toReadableWritablePair<R, W>(duplex: Duplex): ReadableWritablePair<R, W>`
 
-  // Each value is a Uint8Array of exactly 1024 bytes
-  // (except possibly the last chunk if discardIncompleteChunks is false)
-  console.log('Chunk size:', value.length);
-}
-```
+### Web Stream → Node.js
+
+- `toReadable(readableStream: ReadableStream, options?): Readable`
+- `toWritable(writableStream: WritableStream, options?): Writable`
+- `toTransform(transformStream: TransformStream, options?): Transform`
+- `toDuplex(transformStream: TransformStream, options?): Duplex`
+
+## License
+
+MIT © Yoshiaki Kawazu
+
+## Contributing
+
+Please report bugs and feature requests in the [GitHub Issues](https://github.com/kawaz/stream-bridge/issues).
+Pull requests are welcome.
 
 ## Development
-
-This project uses [Bun](https://bun.sh) for development. Make sure you have it installed.
 
 ```bash
 # Install dependencies
@@ -80,28 +96,6 @@ bun install
 # Run tests
 bun test
 
-# Build the project
+# Build
 bun run build
 ```
-
-## License
-
-MIT License - see the [LICENSE](LICENSE) file for details
-
-## Author
-
-Yoshiaki Kawazu
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Support
-
-If you have any questions or run into issues, please open an issue on the [GitHub repository](https://github.com/kawaz/fixed-chunk-stream/issues).
