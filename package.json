@@ -4,7 +4,10 @@
 	"description": "A utility library that provides bidirectional conversion between Node.js streams and Web Stream API streams",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"files": ["dist", "src"],
+	"files": [
+		"dist",
+		"src"
+	],
 	"type": "module",
 	"scripts": {
 		"build": "bun exec 'rm -rf dist'; bun build ./src/index.ts --outdir ./dist --target=node --minify --sourcemap=linked; tsc --emitDeclarationOnly --declaration --noEmit false",
@@ -34,7 +37,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/kawaz/stream-bridge"
+		"url": "git+https://github.com/kawaz/stream-bridge.git"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
