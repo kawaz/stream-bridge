@@ -43,35 +43,63 @@ export function toReadableWritablePair<R=unknown, W=unknown>(duplex: Duplex): Re
 /**
  * Converts a Web ReadableStream to a Node.js Readable stream
  * @param readableStream The Web ReadableStream to convert
+ * @param options Options passed to the Readable.fromWeb method
  * @returns A Node.js Readable stream with the same functionality
  */
-export function toReadable(readableStream: ReadableStream): Readable {
-  return Readable.fromWeb(readableStream as unknown as nodeStreamWeb.ReadableStream);
+export function toReadable(
+  readableStream: ReadableStream,
+  options?: Parameters<typeof Readable.fromWeb>[1]
+): Readable {
+  return Readable.fromWeb(
+    readableStream as unknown as nodeStreamWeb.ReadableStream,
+    options
+  );
 }
 
 /**
  * Converts a Web WritableStream to a Node.js Writable stream
  * @param writableStream The Web WritableStream to convert
+ * @param options Options passed to the Writable.fromWeb method
  * @returns A Node.js Writable stream with the same functionality
  */
-export function toWritable(writableStream: WritableStream): Writable {
-  return Writable.fromWeb(writableStream as unknown as nodeStreamWeb.WritableStream);
+export function toWritable(
+  writableStream: WritableStream,
+  options?: Parameters<typeof Writable.fromWeb>[1]
+): Writable {
+  return Writable.fromWeb(
+    writableStream as unknown as nodeStreamWeb.WritableStream,
+    options
+  );
 }
 
 /**
  * Converts a Web TransformStream to a Node.js Transform stream
  * @param transformStream The Web TransformStream to convert
+ * @param options Options passed to the Transform.fromWeb method
  * @returns A Node.js Transform stream with the same functionality
  */
-export function toTransform(transformStream: TransformStream): Transform {
-  return Transform.fromWeb(transformStream as unknown as nodeStreamWeb.TransformStream) as Transform;
+export function toTransform(
+  transformStream: TransformStream,
+  options?: Parameters<typeof Transform.fromWeb>[1]
+): Transform {
+  return Transform.fromWeb(
+    transformStream as unknown as nodeStreamWeb.TransformStream,
+    options
+  ) as Transform;
 }
 
 /**
  * Converts a Web TransformStream to a Node.js Duplex stream
  * @param transformStream The Web TransformStream to convert
+ * @param options Options passed to the Duplex.fromWeb method
  * @returns A Node.js Duplex stream with the same functionality
  */
-export function toDuplex(transformStream: TransformStream): Duplex {
-  return Duplex.fromWeb(transformStream as unknown as nodeStreamWeb.TransformStream) as Duplex;
+export function toDuplex(
+  transformStream: TransformStream,
+  options?: Parameters<typeof Duplex.fromWeb>[1]
+): Duplex {
+  return Duplex.fromWeb(
+    transformStream as unknown as nodeStreamWeb.TransformStream,
+    options
+  ) as Duplex;
 }
